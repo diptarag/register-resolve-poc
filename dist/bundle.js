@@ -94,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Alpha; });\nclass Alpha {\n    \n    constructor () {\n        this._registeredViews = new Map();\n    }\n\n    render () {\n        console.log('This is container Alpha');\n\n        this._registeredViews.values().forEach(config => {\n            let ViewClass = config.view,\n                view = new ViewClass();\n            view.render();            \n        });\n    }\n\n    register (name, view, config) {\n        this._registeredViews.set(name, Object.assign({ view }, config));\n    }\n}\n\n//# sourceURL=webpack:///./src/area/Alpha.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nvar Alpha = {\n    _registeredViews: new Map(),\n    render: function () {\n        console.log('This is container Alpha');\n\n        for (let config of this._registeredViews.values()) {\n            let ViewClass = config.view,\n                view = new ViewClass();\n            view.render(); \n        }\n\n        // this._registeredViews.size > 0 && this._registeredViews.values().forEach(config => {\n        //     let ViewClass = config.view,\n        //         view = new ViewClass();\n        //     view.render();            \n        // });\n    },\n    register: function (name, view, config) {\n        this._registeredViews.set(name, Object.assign({ view }, config));\n    }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Alpha);\n\n//# sourceURL=webpack:///./src/area/Alpha.js?");
 
 /***/ }),
 
@@ -106,7 +106,55 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Beta; });\nclass Beta {\n    constructor () {\n        this._registeredViews = new Map();\n    }\n\n    render (viewName) {\n        console.log('This is container Beta');\n\n        if (viewName) {\n            let ViewClass = this.resolve(viewName),\n                view = new ViewClass();\n            view.render();\n        }        \n    }\n\n    register (name, view, config) {\n        this._registeredViews.set(name, Object.assign({ view }, config));\n    }\n\n    resolve (name) {\n        return this._registeredViews.get(name).view;\n    }\n}\n\n//# sourceURL=webpack:///./src/area/Beta.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nvar Beta = {\n    _registeredViews: new Map(),\n\n    render: function (viewName) {\n        console.log('This is container Beta');\n\n        if (viewName) {\n            let ViewClass = this.resolve(viewName),\n                view = new ViewClass();\n            view.render();\n\n\n            let otherRegisterdViews = [];\n            for (let key of this._registeredViews.keys()) {\n                if (key !== viewName) {\n                    otherRegisterdViews.push(key);\n                }\n            }\n\n            console.log(`Beta area also had ${otherRegisterdViews.join(', ')} views registered apart from ${viewName}`);\n        }\n    },\n\n    register: function (name, view, config) {\n        this._registeredViews.set(name, Object.assign({ view }, config));\n    },\n\n    resolve: function (name) {\n        return this._registeredViews.get(name).view;\n    }\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Beta);\n\n//# sourceURL=webpack:///./src/area/Beta.js?");
+
+/***/ }),
+
+/***/ "./src/area/index.js":
+/*!***************************!*\
+  !*** ./src/area/index.js ***!
+  \***************************/
+/*! exports provided: Alpha, Beta */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Alpha__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Alpha */ \"./src/area/Alpha.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Alpha\", function() { return _Alpha__WEBPACK_IMPORTED_MODULE_0__[\"default\"]; });\n\n/* harmony import */ var _Beta__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Beta */ \"./src/area/Beta.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Beta\", function() { return _Beta__WEBPACK_IMPORTED_MODULE_1__[\"default\"]; });\n\n\n\n\n\n\n//# sourceURL=webpack:///./src/area/index.js?");
+
+/***/ }),
+
+/***/ "./src/builder/AreaBuilder.js":
+/*!************************************!*\
+  !*** ./src/builder/AreaBuilder.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _AreaViewMapping__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AreaViewMapping */ \"./src/builder/AreaViewMapping.js\");\n/* harmony import */ var _enums_AreaTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/AreaTypes */ \"./src/enums/AreaTypes.js\");\n\n\n\nvar AreaBuilder = {\n    registerViews: function (area, views) {\n        let areaViews = _AreaViewMapping__WEBPACK_IMPORTED_MODULE_0__[\"default\"][area];\n\n        for (let view in areaViews) {\n            console.log(view);\n        }\n    }\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (AreaBuilder);\n\n//# sourceURL=webpack:///./src/builder/AreaBuilder.js?");
+
+/***/ }),
+
+/***/ "./src/builder/AreaViewMapping.js":
+/*!****************************************!*\
+  !*** ./src/builder/AreaViewMapping.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _enums_AreaTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/AreaTypes */ \"./src/enums/AreaTypes.js\");\n\n\nvar AreaViewMapping = {\n    [_enums_AreaTypes__WEBPACK_IMPORTED_MODULE_0__[\"default\"].ALPHA]: {\n        'Foo': {\n            viewPath: 'views/Foo.js',\n            config: {\n                charlie: 'A'\n            }\n        },\n        'Bar': {\n            viewPath: 'views/Bar.js',\n            config: {\n                charlie: 'B'\n            }\n        }\n    },\n    [_enums_AreaTypes__WEBPACK_IMPORTED_MODULE_0__[\"default\"].BETA]: {\n        'Baz': {\n            viewPath: 'views/Baz.js',\n            config: {\n                charlie: 'C'\n            }\n        },\n        'Bar': {\n            viewPath: 'views/Bar.js',\n            config: {\n                charlie: 'D'\n            }\n        }\n    }\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (AreaViewMapping);\n\n//# sourceURL=webpack:///./src/builder/AreaViewMapping.js?");
+
+/***/ }),
+
+/***/ "./src/enums/AreaTypes.js":
+/*!********************************!*\
+  !*** ./src/enums/AreaTypes.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n    ALPHA: 'alpha',\n    BETA: 'beta'\n});\n\n//# sourceURL=webpack:///./src/enums/AreaTypes.js?");
 
 /***/ }),
 
@@ -118,7 +166,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _area_Alpha__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./area/Alpha */ \"./src/area/Alpha.js\");\n/* harmony import */ var _area_Beta__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./area/Beta */ \"./src/area/Beta.js\");\n\n\n\nvar alpha = new _area_Alpha__WEBPACK_IMPORTED_MODULE_0__[\"default\"](),\n    beta = new _area_Beta__WEBPACK_IMPORTED_MODULE_1__[\"default\"]();\n\nalpha.render();\nbeta.render();\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _area__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./area */ \"./src/area/index.js\");\n/* harmony import */ var _builder_AreaBuilder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./builder/AreaBuilder */ \"./src/builder/AreaBuilder.js\");\n/* harmony import */ var _enums_AreaTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enums/AreaTypes */ \"./src/enums/AreaTypes.js\");\n\n\n\n\n_builder_AreaBuilder__WEBPACK_IMPORTED_MODULE_1__[\"default\"].registerViews(_enums_AreaTypes__WEBPACK_IMPORTED_MODULE_2__[\"default\"].ALPHA);\n\n_area__WEBPACK_IMPORTED_MODULE_0__[\"Alpha\"].render();\n_area__WEBPACK_IMPORTED_MODULE_0__[\"Beta\"].render('Baz');\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ })
 
